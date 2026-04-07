@@ -6,10 +6,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -19,7 +20,8 @@ public class SecurityConfiguration {
             "/v3/api-docs.yaml",
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/swagger-ui.html");
+            "/swagger-ui.html",
+            "/v1/auth/**");
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -32,6 +34,12 @@ public class SecurityConfiguration {
                     requests.anyRequest().authenticated();
                 });
 
+        http.addFilterBefore(new ApiKeyAuthenticationFilter(), BearerTokenAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordBCryptEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
