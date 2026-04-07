@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@MappedSuperclass
 public abstract class BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
