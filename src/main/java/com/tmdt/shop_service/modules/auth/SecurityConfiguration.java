@@ -21,7 +21,8 @@ public class SecurityConfiguration {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
-            "/v1/auth/**");
+            "/v1/auth/**",
+            "/v1/public/**");
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,7 +31,7 @@ public class SecurityConfiguration {
                         sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> {
                     requests.requestMatchers(permitUrls.toArray(new String[0])).permitAll();
-
+                    requests.requestMatchers("/v1/admin/**").hasAuthority("ROLE_ADMIN");
                     requests.anyRequest().authenticated();
                 });
 
