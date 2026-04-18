@@ -21,12 +21,14 @@ public class CustomUserDetail implements UserDetails {
     private String fullName;
     private String email;
     private String phoneNumber;
+    private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetail(Long id, String fullName, String email, String phoneNumber) {
+    public CustomUserDetail(Long id, String fullName, String email, String phoneNumber,  Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.authorities = authorities;
     }
 
     @Override
